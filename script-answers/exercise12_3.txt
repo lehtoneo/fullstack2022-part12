@@ -1,0 +1,9 @@
+No script command on windows but here are the commands I used:
+
+nano /usr/src/app/index.js
+
+Write the console.log... to the editor.
+
+ctrl + s to save
+
+ctrl + x to exit
