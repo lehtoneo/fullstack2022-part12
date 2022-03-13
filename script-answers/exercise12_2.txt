@@ -1,0 +1,9 @@
+No script command on windows but here are the commands I used:
+
+docker container run -it ubuntu bash
+
+mkdir usr/src/app
+
+touch usr/src/app/index.js
+
+exit
