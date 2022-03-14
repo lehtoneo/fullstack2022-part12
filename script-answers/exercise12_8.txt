@@ -1,0 +1,16 @@
+No script command on windows but here are the commands I used:
+
+docker compose -f docker-compose.dev.yml up
+
+docker exec -it todo-backend-mongo-1 bash
+
+mongo -u root -p example
+
+Inside Mongo CLI:
+  show dbs
+  use the_database
+  db.todos.insertOne({ text: "Increase the number of tools in my toolbelt", done: false })
+  (it prints out: {
+      "acknowledged" : true,
+      "insertedId" : ObjectId("622ef507909cebafe56c5515")
+  })

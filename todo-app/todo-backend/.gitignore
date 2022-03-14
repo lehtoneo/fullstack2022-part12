@@ -1,3 +1,6 @@
+#volumes
+*_data
+
 # Logs
 logs
 *.log
