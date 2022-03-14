@@ -1,0 +1,18 @@
+No script command on windows but here are the commands I used:
+
+docker exec -it todo-backend-redis-1 redis-cli
+
+KEYS * 
+1) "added_todos"
+
+GET added_todos
+"9"
+
+SET added_todos "9001"
+OK
+
+DEL added_todos
+(integer) 1
+
+Inside redis CLI:
+  
