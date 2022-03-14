@@ -1,6 +1,9 @@
+const { redisMiddleware } = require('../middleware');
 const express = require('express');
 const { Todo } = require('../mongo')
 const router = express.Router();
+
+router.use('*', redisMiddleware);
 
 /* GET todos listing. */
 router.get('/', async (_, res) => {
@@ -14,10 +17,15 @@ router.post('/', async (req, res) => {
     text: req.body.text,
     done: false
   })
+  const { redis } = req;
+  const addedTodos = await redis.getAsync("added_todos");
+  const newAddedTodos = Number(addedTodos) + 1;
+  await redis.setAsync("added_todos", newAddedTodos);
   res.send(todo);
 });
 
 const singleRouter = express.Router();
+
 
 const findByIdMiddleware = async (req, res, next) => {
   const { id } = req.params
