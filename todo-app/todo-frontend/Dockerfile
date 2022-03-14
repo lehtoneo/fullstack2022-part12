@@ -1,5 +1,7 @@
 FROM node:16 AS build-stage
 
+ARG REACT_APP_BACKEND_URL
+
 WORKDIR /usr/src/app
 
 COPY . .
@@ -8,7 +10,8 @@ RUN npm ci
 
 RUN CI=true npm test
 
-ENV REACT_APP_BACKEND_URL=http://localhost:3001
+ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
+
 RUN npm run build
 
 # This is a new stage, everything before this is gone, except the files we want to COPY
