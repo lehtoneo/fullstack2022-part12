@@ -19,6 +19,8 @@ services:
       - ./nodemon.json:/home/node/app/nodemon.json
   mongo:
     image: mongo
+    ports:
+     - 3456:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
@@ -42,3 +44,5 @@ services:
     command: ['redis-server', '--appendonly', 'yes'] # Overwrite the CMD
     volumes: # Declare the volume
       - ./redis_data:/data
+    ports:
+     - 6379:6379
