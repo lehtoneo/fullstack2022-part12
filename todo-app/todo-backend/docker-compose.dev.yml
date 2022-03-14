@@ -1,21 +1,44 @@
 version: '3.8'
 
 services:
+  todo-backend:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    environment:
+      - MONGO_URL=mongodb://the_username:the_password@mongo/the_database
+      - REDIS_URL=redis://redis
+      - PORT=3001
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports: 
+      - 3001:3001
+    volumes:
+      - ./:/home/node/app
+      - ./nodemon.json:/home/node/app/nodemon.json
   mongo:
     image: mongo
-    ports:
-     - 3456:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE: the_database
+    healthcheck:
+      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u root -p example --quiet | grep 1
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
     volumes: 
       - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
       - ./mongo_data:/data/db
   redis:
     image: redis:7.0-rc-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     command: ['redis-server', '--appendonly', 'yes'] # Overwrite the CMD
     volumes: # Declare the volume
       - ./redis_data:/data
-    ports:
-     - 6379:6379
