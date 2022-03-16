@@ -7,3 +7,10 @@ Backend is Python Rest API and frontend is a React app (create-react-app)
 ``` 
 docker compose -f docker-compose.dev.yml up --build
 ```
+
+## Prod setup:
+
+
+``` 
+docker compose up --build
+```

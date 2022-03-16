@@ -1,0 +1,45 @@
+services:
+  app:
+    image: todo-app-frontend
+    build:
+      context: ./frontend 
+      dockerfile: Dockerfile 
+      args:
+        REACT_APP_BACKEND_URL: http://localhost:5000
+    volumes:
+      - ./frontend:/usr/src/app 
+    ports:
+      - 3000:80
+    container_name: todo-app-frontend
+
+  backend:
+    image: todo-app-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DB_URL: postgresql://postgres:password@postgres-db:5432/todo-db
+    # healthcheck
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    container_name: todo-app-backend
+    ports:
+      - 5000:5000
+
+  postgres-db:
+      image: postgres:14.2-alpine
+      ports:
+        - 5432:5432
+      restart: always
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+      environment:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: todo-db
+      container_name: todo-app-postgres
+      volumes:
+        - ./postgres_data:/var/lib/postgresql/data
